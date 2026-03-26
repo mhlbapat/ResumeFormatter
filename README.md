@@ -2,30 +2,21 @@
 
 ResumeFormatter generates tailored resume PDFs from job descriptions using a local FastAPI backend and a Chrome extension.
 
-## What this tool does
-
-- Accepts a job description (from the web app or Chrome extension)
-- Uses your `profile.md` data + LLM prompts to generate a tailored resume
-- Renders the result to PDF
-- Lets the Chrome extension download and open the PDF automatically
-
-## Prerequisites
-
-- Python 3.11+
-- Google Chrome
-- `pdflatex` installed and available on your `PATH` (MacTeX/TeX Live)
-- An LLM API key (for example `OPENAI_API_KEY` when using OpenAI)
+- Accepts a pasted job description
+- Reads only `data/cv/profile.md` (configurable) as the candidate profile
+- Uses an LLM to generate tailored resume content
+- Renders the result to PDF and lets the extension download/open it
 
 ## Installation
 
-From the project root:
+1. Clone the repo
 
 ```bash
 git clone https://github.com/mhlbapat/resume_formatter.git
 cd resume_formatter
 ```
 
-## Create a new Conda environment (recommended)
+2. Create and activate a Conda environment (recommended)
 
 ```bash
 conda create -n resume_formatter python=3.11 -y
@@ -33,13 +24,13 @@ conda activate resume_formatter
 python -m pip install --upgrade pip
 ```
 
-## Install requirements
+3. Install requirements
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-## Configure environment variables
+4. Configure environment variables
 
 Create a `.env` file in the project root (or export variables in your shell):
 
@@ -50,29 +41,23 @@ OPENAI_API_KEY=your_openai_api_key
 # OLLAMA_BASE_URL=http://localhost:11434
 ```
 
-## Configure project settings
+5. Configure `config/settings.yaml`
 
-Update `config/settings.yaml` as needed:
+Update these as needed:
 
 - `resume.projects_path` -> path to your profile/project markdown (default: `data/cv/profile.md`)
-- The backend reads only `profile.md` (it ships as a template in `data/cv/profile.md`).
+- The backend reads only `profile.md` (the repo ships a template in `data/cv/profile.md`)
 - `resume.phd_degree` -> academic track label shown on resumes (default: `Chemical Engineering`)
 - `llm.provider` and `llm.model` -> match your selected API provider
 - `resume.candidate_name` and contact fields
 
-## Run the backend
-
-Start the FastAPI server:
+6. Run the backend
 
 ```bash
 python -m uvicorn web.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Open `http://localhost:8000` to confirm the app is running.
-
----
-
-## Enable the Chrome extension
+7. Enable the Chrome extension
 
 1. Open Chrome and go to `chrome://extensions`.
 2. Turn on **Developer mode** (top-right).
@@ -80,16 +65,11 @@ Open `http://localhost:8000` to confirm the app is running.
 4. Select the folder: `resume-formatter-chrome-extension`.
 5. Confirm the extension appears as **ResumeFormatter**.
 
-Important:
+The extension expects the backend at `http://localhost:8000`.
 
-- Keep the backend running at `http://localhost:8000`.
-- The extension is configured to call that local backend.
+## Usage
 
----
-
-## How to use the Chrome extension
-
-1. Click the ResumeFormatter extension icon in Chrome.
+1. Click the **ResumeFormatter** extension icon in Chrome.
 2. Paste the full job description text into the popup text area.
 3. Click **Generate & Download**.
 4. Wait for processing:
