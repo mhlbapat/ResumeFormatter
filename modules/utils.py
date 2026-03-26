@@ -43,7 +43,6 @@ def setup_logging(level: str = "INFO", log_dir: Optional[Path] = None) -> None:
 class AppConfig:
     """Strongly-typed subset of application configuration."""
 
-    cv_path: Path
     data_dir: Path
     log_dir: Path
     log_level: str
@@ -71,7 +70,6 @@ def load_config(config_path: Optional[Path] = None) -> AppConfig:
     log_dir = PROJECT_ROOT / app_cfg.get("log_dir", "logs")
 
     return AppConfig(
-        cv_path=PROJECT_ROOT / app_cfg.get("cv_path", "data/cv/Resume.pdf"),
         data_dir=data_dir,
         log_dir=log_dir,
         log_level=app_cfg.get("log_level", "INFO"),

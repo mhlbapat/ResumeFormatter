@@ -113,7 +113,7 @@ def generate_from_text(req: GenerateFromTextRequest) -> GenerateFromTextResponse
     }
 
     try:
-        content = state.generator.generate_for_job("", job)
+        content = state.generator.generate_for_job(job)
         with tempfile.NamedTemporaryFile(
             prefix="resume_", suffix=".pdf", delete=False, dir=str(state.output_dir)
         ) as tmp:

@@ -5,7 +5,7 @@ ResumeFormatter generates tailored resume PDFs from job descriptions using a loc
 ## What this tool does
 
 - Accepts a job description (from the web app or Chrome extension)
-- Uses your CV/profile data + LLM prompts to generate a tailored resume
+- Uses your `profile.md` data + LLM prompts to generate a tailored resume
 - Renders the result to PDF
 - Lets the Chrome extension download and open the PDF automatically
 
@@ -54,8 +54,9 @@ OPENAI_API_KEY=your_openai_api_key
 
 Update `config/settings.yaml` as needed:
 
-- `app.cv_path` -> path to your base CV PDF (default: `data/cv/Resume.pdf`)
 - `resume.projects_path` -> path to your profile/project markdown (default: `data/cv/profile.md`)
+- The backend reads only `profile.md` (it ships as a template in `data/cv/profile.md`).
+- `resume.phd_degree` -> academic track label shown on resumes (default: `Chemical Engineering`)
 - `llm.provider` and `llm.model` -> match your selected API provider
 - `resume.candidate_name` and contact fields
 

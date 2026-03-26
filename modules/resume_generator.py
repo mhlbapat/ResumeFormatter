@@ -25,15 +25,6 @@ RankedJob = Any
 
 logger = logging.getLogger(__name__)
 
-ALLOWED_PHD_DEGREES: tuple[str, ...] = (
-    "Mechanics, Chemistry and Materials",
-    "Computational Mechanics",
-    "Computational Molecular Physics",
-    "Computational Fluid Mechanics",
-    "Computational Material Science",
-)
-
-
 @dataclass
 class ResearchExperienceItem:
     """One research project in the Research Experience section."""
@@ -101,7 +92,7 @@ SKILLS SECTION (draw from the FULL profile):
 
 FORMAT RULES:
 - Output a single VALID JSON object with exactly these keys:
-  job_title, company, phd_degree, summary, skills, research_experience.
+  job_title, company, location, summary, skills, research_experience.
 - No commentary.
 - No code fences.
 - Do not truncate.
@@ -115,27 +106,19 @@ BULLET STYLE GUIDE:
 - Each bullet must be 10-15 words.
 
 TASK (applied using the candidate profile above and the job description in the user message):
-1. Choose "phd_degree" from exactly these options (use one verbatim):
-   - Mechanics, Chemistry and Materials
-   - Computational Mechanics
-   - Computational Molecular Physics
-   - Computational Fluid Mechanics
-   - Computational Material Science
+1. Write a professional summary tailored to the target job, under 100 words, using the candidate's full profile.
 
-2. Write a professional summary tailored to the target job, under 100 words, using the candidate's full profile.
+2. Select 3 skill groups with short headings with 4 to 6 items in each group from the candidate's full profile that match the job. Include transferable skills (e.g. AI/LLM, Python, data, automation) when present in the profile. Avoid duplicate skills across groups.
 
-3. Select 3 skill groups with short headings with 4 to 6 items in each group from the candidate's full profile that match the job. Include transferable skills (e.g. AI/LLM, Python, data, automation) when present in the profile. Avoid duplicate skills across groups.
+3. Select 5 projects from the candidate profile most relevant to the target job for the Research Experience section. For each: include the project title (or rephrase it to be more job-relevant), and choose 4 bullets from the bullet bank and/or rephrase them to be more job-relevant. Prioritize quantifiable impact; align with the job description; stay factual.
 
-4. Select 5 projects from the candidate profile most relevant to the target job for the Research Experience section. For each: include the project title (or rephrase it to be more job-relevant), and choose 4 bullets from the bullet bank and/or rephrase them to be more job-relevant. Prioritize quantifiable impact; align with the job description; stay factual.
-
-5. From the job description, extract the job posting's job title and company name and location. Include them in your JSON as "job_title", "company", and "location".
+4. From the job description, extract the job posting's job title and company name and location. Include them in your JSON as "job_title", "company", and "location".
 
 RESPONSE FORMAT (JSON only):
 {
   "job_title": "<job posting title from the description>",
   "company": "<company/employer name from the description>",
   "location": "<location from the description>",
-  "phd_degree": "<exactly one of the allowed values above>",
   "summary": "<summary text>",
   "skills": [{"heading": "<group name>", "items": ["Item 1", "Item 2", ...]}],
   "research_experience": [{"title": "<project title>", "bullets": ["<bullet 1>", "<bullet 2>", "<bullet 3>", "<bullet 4>"]}],
@@ -218,7 +201,10 @@ def _extract_first_json_object(raw: str) -> Optional[str]:
 
 
 class ResumeGenerator:
-    """Generate tailored resume content for ranked jobs via an LLM."""
+    """Generate tailored resume content for a job via an LLM.
+
+    This implementation reads only `profile.md` (projects_path).
+    """
 
     def __init__(self, config: AppConfig, llm_client: BaseLLMClient):
         self.config = config
@@ -246,7 +232,7 @@ class ResumeGenerator:
             logger.warning("Failed to read at %s: %s", projects_path, exc)
             return ""
 
-    def generate_for_job(self, cv_text: str, job: RankedJob) -> ResumeContent:
+    def generate_for_job(self, job: RankedJob) -> ResumeContent:
         """
         Create a tailored summary, skills, and research experience (4-5 projects, 4-5 bullets each).
         Always passes the full profile.md to the LLM so the model can use the entire candidate
@@ -256,24 +242,10 @@ class ResumeGenerator:
         """
         logger.info("Generating tailored resume content for '%s' at '%s'", job.title, job.company)
 
-        resume_cfg = getattr(self.config, "resume", {}) or {}
-        # When True, only profile.md is sent; cv_text is not used. Default True so CV is never sent unless explicitly requested.
-        use_projects_only = bool(resume_cfg.get("use_projects_only", True))
-
         profile_md = self._load_projects_text()
-
-        # Build candidate context: full profile is primary; optionally append CV when configured.
-        if use_projects_only:
-            candidate_text = profile_md or ""
-            if not candidate_text.strip():
-                logger.warning(
-                    "use_projects_only is True but projects_path is empty or unreadable. "
-                    "LLM will receive no candidate text."
-                )
-        else:
-            candidate_text = (cv_text or "").strip()
-            if profile_md.strip():
-                candidate_text = f"{candidate_text}\n\n---\n\nPROFILE (Markdown):\n{profile_md}"
+        candidate_text = profile_md or ""
+        if not candidate_text.strip():
+            logger.warning("projects_path is empty or unreadable; LLM will receive no candidate text.")
 
         # Cache-friendly structure: system_prompt = static prefix (instructions + full profile),
         # user_prompt = dynamic suffix (job-specific). Same prefix across jobs → better prompt cache hit rate.
@@ -293,11 +265,7 @@ class ResumeGenerator:
         if not data:
             logger.warning("LLM returned no parseable JSON. raw_len=%d", len(raw or ""))
 
-        phd_degree = str(
-            data.get("phd_degree") or data.get("phdDegree") or "Mechanics, Chemistry and Materials"
-        ).strip()
-        if phd_degree not in ALLOWED_PHD_DEGREES:
-            phd_degree = "Mechanics, Chemistry and Materials"
+        phd_degree = str(self.config.resume.get("phd_degree") or "Chemical Engineering").strip()
 
         summary = str(data.get("summary", "")).strip() or "Ph.D. researcher in computational modeling and scientific computing."
 
