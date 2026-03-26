@@ -15,15 +15,12 @@ import logging
 import re
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, TYPE_CHECKING
+from typing import Any, Dict, List, Optional
 
 from .llm_engine import BaseLLMClient, LLMRequest
-from .utils import AppConfig, PROJECT_ROOT, read_json
+from .utils import AppConfig, PROJECT_ROOT
 
-if TYPE_CHECKING:
-    from .job_ranker import RankedJob
-else:
-    RankedJob = Any  # type: ignore[misc,assignment]
+RankedJob = Any
 
 
 logger = logging.getLogger(__name__)
@@ -398,45 +395,3 @@ class ResumeGenerator:
         )
 
 
-def load_parsed_cv_text(config: AppConfig) -> str:
-    """Load raw CV text from the parsed CV JSON (Phase 1)."""
-    cv_stem = config.cv_path.stem
-    parsed_cv_json = config.data_dir / "cv" / f"{cv_stem}_parsed.json"
-    parsed_cv_json = parsed_cv_json.resolve()
-    if not parsed_cv_json.exists():
-        raise FileNotFoundError(f"Parsed CV JSON not found at {parsed_cv_json}")
-
-    logger.info("Loading parsed CV text from %s", parsed_cv_json)
-    data = read_json(parsed_cv_json)
-    return str(data.get("raw_text", ""))
-
-
-def load_ranked_jobs_latest(config: AppConfig) -> List[RankedJob]:
-    """Load the most recently written ranked jobs file."""
-    ranked_dir = config.data_dir / "ranked_jobs"
-    ranked_dir = ranked_dir.resolve()
-    if not ranked_dir.exists():
-        raise FileNotFoundError(f"Ranked jobs directory not found at {ranked_dir}")
-
-    candidates = sorted(ranked_dir.glob("ranked_jobs_*.json"))
-    if not candidates:
-        raise FileNotFoundError(f"No ranked_jobs_*.json files found in {ranked_dir}")
-
-    latest_path = max(candidates, key=lambda p: p.stat().st_mtime)
-    logger.info("Loading ranked jobs from %s", latest_path)
-    raw_jobs: Sequence[Dict[str, Any]] = read_json(latest_path)
-
-    ranked_jobs: List[RankedJob] = []
-    for item in raw_jobs:
-        ranked_jobs.append(
-            RankedJob(
-                title=str(item.get("title", "")).strip(),
-                company=str(item.get("company", "")).strip(),
-                location=str(item.get("location", "")).strip(),
-                description=str(item.get("description", "")).strip(),
-                apply_link=str(item.get("apply_link", "")).strip(),
-                source_site=str(item.get("source_site", "")).strip(),
-                similarity=float(item.get("similarity", 0.0)),
-            )
-        )
-    return ranked_jobs

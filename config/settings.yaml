@@ -1,0 +1,21 @@
+app:
+  data_dir: data
+  log_dir: logs
+  log_level: INFO
+  cv_path: data/cv/Resume.pdf
+
+llm:
+  provider: openai
+  model: gpt-5-mini
+  max_output_tokens: 4000
+
+resume:
+  projects_path: data/cv/profile.md
+  use_projects_only: true
+  template_path: templates/resume_template.tex
+  output_dir: data/resumes
+  candidate_name: Candidate Name
+  contact:
+    email: ""
+    phone: ""
+    location: ""

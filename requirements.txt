@@ -1,16 +1,9 @@
-pdfminer.six
-spacy
-sentence-transformers
-python-jobspy
 jinja2
-playwright
 PyYAML
 python-dotenv
 openai
 requests
 fastapi
 uvicorn
-httpx
-trafilatura
 google-genai
 

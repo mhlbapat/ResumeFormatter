@@ -47,13 +47,8 @@ class AppConfig:
     data_dir: Path
     log_dir: Path
     log_level: str
-    spacy_model: str
-
-    scraping: Dict[str, Any]
-    ranking: Dict[str, Any]
     llm: Dict[str, Any]
     resume: Dict[str, Any]
-    browser: Dict[str, Any]
 
 
 def load_config(config_path: Optional[Path] = None) -> AppConfig:
@@ -80,12 +75,8 @@ def load_config(config_path: Optional[Path] = None) -> AppConfig:
         data_dir=data_dir,
         log_dir=log_dir,
         log_level=app_cfg.get("log_level", "INFO"),
-        spacy_model=raw.get("nlp", {}).get("spacy_model", "en_core_web_sm"),
-        scraping=raw.get("scraping", {}),
-        ranking=raw.get("ranking", {}),
         llm=raw.get("llm", {}),
         resume=raw.get("resume", {}),
-        browser=raw.get("browser", {}),
     )
 
 

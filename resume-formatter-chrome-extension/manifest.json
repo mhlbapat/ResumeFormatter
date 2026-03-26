@@ -1,13 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "JobApplicationAgent Resume Generator",
+  "name": "ResumeFormatter",
   "version": "0.1.0",
-  "description": "Generate a tailored resume from the current page's job description using your local JobApplicationAgent backend.",
+  "description": "Generate a tailored resume from pasted job text using your local ResumeFormatter backend.",
   "permissions": [
-    "activeTab",
-    "scripting",
-    "contextMenus",
-    "storage",
     "downloads"
   ],
   "host_permissions": [
@@ -18,14 +14,8 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Generate Tailored Resume",
+    "default_title": "ResumeFormatter",
     "default_popup": "popup.html"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ]
+  }
 }
 

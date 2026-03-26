@@ -16,14 +16,7 @@ from typing import Any, Dict, List, Optional
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .resume_generator import ResumeContent
-from .utils import (
-    AppConfig,
-    PROJECT_ROOT,
-    ensure_dir,
-    latex_escape,
-    latex_escape_url,
-    slugify,
-)
+from .utils import AppConfig, PROJECT_ROOT, ensure_dir, latex_escape, slugify
 
 
 logger = logging.getLogger(__name__)
@@ -171,66 +164,4 @@ class LatexBuilder:
                 result.stderr,
             )
 
-    def render_job_summary_pdf(self, rows: List[Dict[str, Any]]) -> Path:
-        """
-        Render a PDF table of ranked jobs with links to job page and local resume PDF.
-
-        Parameters
-        ----------
-        rows:
-            List of dicts with keys: rank, title, company, location, similarity,
-            job_url, resume_filename. resume_filename is the basename of the
-            resume PDF (same directory as the summary PDF).
-
-        Returns
-        -------
-        Path to the generated summary PDF (data/resumes/job_summary.pdf).
-        """
-        from .utils import PROJECT_ROOT as _ROOT
-
-        summary_template_path = _ROOT / self.config.resume.get(
-            "job_summary_template_path", "templates/job_summary_template.tex"
-        )
-        template_dir = summary_template_path.parent
-        template_name = summary_template_path.name
-
-        env = Environment(
-            loader=FileSystemLoader(template_dir),
-            autoescape=select_autoescape(enabled_extensions=(), default_for_string=False),
-            block_start_string="{%",
-            block_end_string="%}",
-            variable_start_string="{{",
-            variable_end_string="}}",
-        )
-        template = env.get_template(template_name)
-
-        built_rows = []
-        for r in rows:
-            built_rows.append(
-                {
-                    "rank": r["rank"],
-                    "title_tex": latex_escape(r.get("title", "")),
-                    "company_tex": latex_escape(r.get("company", "")),
-                    "location_tex": latex_escape(r.get("location", "")),
-                    "similarity": r.get("similarity", 0.0),
-                    "job_url_tex": latex_escape_url(r.get("job_url", "")),
-                    "resume_filename": r.get("resume_filename", ""),
-                }
-            )
-
-        context = {"rows": built_rows, "total": len(built_rows)}
-        tex_content = template.render(**context)
-
-        output_root = PROJECT_ROOT / self.config.resume.get("output_dir", "data/resumes")
-        ensure_dir(output_root)
-        tex_path = output_root / "job_summary.tex"
-        pdf_path = output_root / "job_summary.pdf"
-
-        logger.info("Writing job summary LaTeX to %s", tex_path)
-        tex_path.write_text(tex_content, encoding="utf-8")
-        self._run_pdflatex(tex_path)
-
-        if pdf_path.exists():
-            logger.info("Generated job summary PDF at %s", pdf_path)
-        return pdf_path
 

@@ -1,4 +1,4 @@
-// Background/service worker for JobApplicationAgent Chrome extension.
+// Background/service worker for ResumeFormatter Chrome extension.
 // For the popup flow: receives raw job description text, calls the local backend,
 // downloads the generated PDF, and opens it in a new tab.
 

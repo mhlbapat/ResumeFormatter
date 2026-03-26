@@ -1,0 +1,45 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.2em, itemsep=0.2em, topsep=0.2em}
+\pagenumbering{gobble}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{ {{ candidate_name }} }}\\
+\vspace{2mm}
+{{ contact.email }} \quad | \quad {{ contact.phone }} \quad | \quad {{ contact.location }}
+\end{center}
+
+\vspace{3mm}
+\noindent\textbf{Target Role:} {{ job_title }} at {{ company }}
+
+\vspace{2mm}
+\noindent\textbf{Professional Summary}
+\par
+{{ summary }}
+
+\vspace{2mm}
+\noindent\textbf{Skills}
+\par
+{% for group in skills %}
+\noindent\textbf{ {{ group.heading }}: } {{ ", ".join(group.items) }}\\
+{% endfor %}
+
+\vspace{2mm}
+\noindent\textbf{Research Experience}
+\par
+{% for exp in research_experience %}
+\noindent\textbf{ {{ exp.title }} }
+\begin{itemize}
+{% for bullet in exp.bullets %}
+  \item {{ bullet }}
+{% endfor %}
+\end{itemize}
+{% endfor %}
+
+\end{document}
