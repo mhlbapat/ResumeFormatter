@@ -22,22 +22,10 @@ From the project root:
 
 ```bash
 git clone <your-repo-url>
-cd ResumeFormatter
+cd resume_formatter
 ```
 
-## Create a new Python environment
-
-Use either `venv` or Conda.
-
-### Option A: `venv` (recommended)
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-```
-
-### Option B: Conda
+## Create a new Conda environment (recommended)
 
 ```bash
 conda create -n resume_formatter python=3.11 -y
@@ -48,7 +36,7 @@ python -m pip install --upgrade pip
 ## Install requirements
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ## Configure environment variables
