@@ -13,6 +13,9 @@ resume:
   template_path: templates/resume_template.tex
   output_dir: data/resumes
   candidate_name: Candidate Name
+  # Path to the editable system prompt template used for resume generation.
+  # The template must include the token `<<FULL_PROFILE_TEXT>>`.
+  static_prompt_path: prompts/resume_static_prefix.txt
   # Academic track label shown on generated resumes (not chosen by the LLM).
   phd_degree: Chemical Engineering
   contact:

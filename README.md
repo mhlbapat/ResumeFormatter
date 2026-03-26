@@ -30,7 +30,9 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-4. Configure environment variables
+## Setup
+
+1. Configure environment variables
 
 Create a `.env` file in the project root (or export variables in your shell):
 
@@ -41,23 +43,34 @@ OPENAI_API_KEY=your_openai_api_key
 # OLLAMA_BASE_URL=http://localhost:11434
 ```
 
-5. Configure `config/settings.yaml`
+2. Configure `config/settings.yaml`
 
 Update these as needed:
 
-- `resume.projects_path` -> path to your profile/project markdown (default: `data/cv/profile.md`)
-- The backend reads only `profile.md` (the repo ships a template in `data/cv/profile.md`)
+- `resume.projects_path` -> path to your `profile.md` (default: `data/cv/profile.md`)
 - `resume.phd_degree` -> academic track label shown on resumes (default: `Chemical Engineering`)
-- `llm.provider` and `llm.model` -> match your selected API provider
-- `resume.candidate_name` and contact fields
+- `resume.candidate_name` and `resume.contact.*`
+- `llm.provider` and `llm.model`
+- `resume.static_prompt_path` -> prompt template used for resume generation (default: `prompts/resume_static_prefix.txt`)
 
-6. Run the backend
+3. Tune the system prompt (recommended)
+
+Edit the prompt template at `prompts/resume_static_prefix.txt`.
+
+The file is loaded by `build_resume_static_prefix()` and must include the token:
+
+`<<FULL_PROFILE_TEXT>>`
+
+The LLM output must remain valid JSON with these keys:
+`job_title, company, location, summary, skills, research_experience`.
+
+4. Run the backend
 
 ```bash
 python -m uvicorn web.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-7. Enable the Chrome extension
+5. Enable the Chrome extension
 
 1. Open Chrome and go to `chrome://extensions`.
 2. Turn on **Developer mode** (top-right).
