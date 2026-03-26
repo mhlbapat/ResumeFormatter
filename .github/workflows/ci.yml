@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          create-environment: true
+          activate-environment: resume_formatter
+          environment-name: resume_formatter
+          python-version: "3.11"
+          channels: conda-forge,defaults
+
+      - name: Install dependencies (Conda env)
+        shell: bash -l {0}
+        run: |
+          conda activate resume_formatter
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run unit tests
+        shell: bash -l {0}
+        run: |
+          pytest -q
+

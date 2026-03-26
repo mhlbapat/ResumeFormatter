@@ -6,4 +6,5 @@ requests
 fastapi
 uvicorn
 google-genai
+pytest
 
