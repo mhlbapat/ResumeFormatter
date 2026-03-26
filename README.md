@@ -21,7 +21,7 @@ ResumeFormatter generates tailored resume PDFs from job descriptions using a loc
 From the project root:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/mhlbapat/resume_formatter.git
 cd resume_formatter
 ```
 
