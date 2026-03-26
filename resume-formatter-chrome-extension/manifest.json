@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "JobApplicationAgent Resume Generator",
+  "version": "0.1.0",
+  "description": "Generate a tailored resume from the current page's job description using your local JobApplicationAgent backend.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "contextMenus",
+    "storage",
+    "downloads"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Generate Tailored Resume",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
+

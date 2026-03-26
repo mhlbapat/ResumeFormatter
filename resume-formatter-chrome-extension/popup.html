@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>JobApplicationAgent</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 520px;
+        height: 640px;
+      }
+      /* Visually hide outer scrollbars while allowing the popup to scroll if needed */
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        padding: 8px 12px;
+        border-bottom: 1px solid #ddd;
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      #status {
+        padding: 8px 12px;
+        font-size: 12px;
+        color: #555;
+        min-height: 32px;
+      }
+      #spinner {
+        display: none;
+        margin-left: 6px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #555;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      #editor {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 8px 12px;
+        gap: 6px;
+        overflow: hidden; /* contain textarea scrolling */
+      }
+      #jobText {
+        flex: 1;
+        width: 100%;
+        resize: none;
+        font-family: inherit;
+        font-size: 12px;
+        padding: 6px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        overflow: auto; /* only this area scrolls when content is long */
+      }
+      #generateBtn {
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background: #f7f7f7;
+        cursor: pointer;
+      }
+      #generateBtn:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      #retry {
+        display: none;
+        margin-left: 8px;
+        font-size: 11px;
+        cursor: pointer;
+        color: #0066cc;
+        text-decoration: underline;
+      }
+      #controls {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 4px 12px;
+        gap: 8px;
+        border-top: 1px solid #eee;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span>JobApplicationAgent</span>
+      <button id="generateBtn">Generate &amp; Download</button>
+    </header>
+    <div id="status">
+      Paste a job description below and click \"Generate & Download\" to create a tailored resume.
+      <span id="spinner"></span>
+      <span id="retry">Try again</span>
+    </div>
+    <div id="editor">
+      <textarea id="jobText" placeholder="Paste job description here..."></textarea>
+    </div>
+    <div id="controls">
+      <span style="color:#777;font-size:10px;">Backend: http://localhost:8000</span>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
+
