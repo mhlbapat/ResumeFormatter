@@ -18,9 +18,7 @@
 \begin{center}
 {\LARGE \textbf{ {{ candidate_name }} }}\\
 \vspace{0.5mm}
-{{ contact.location }}\\
-\vspace{1mm}
-{\textcolor{blue}{ {{ contact.email }} }} \quad | \quad {{ contact.phone }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
+{{ contact.location }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }} \quad | \quad {{ contact.phone }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
 \end{center}
 
 \vspace{1mm}
@@ -34,11 +32,11 @@
 \textbf{{ "{" }}{{ education.university_name_phd | trim }}{{ "}" }} \hfill {{ education.place_phd }} \\
 Doctor of Philosophy in\phddegree \hfill {{ education.date_phd }}\\
 
-\vspace{1mm}
+\vspace{1pt}
 \textbf{{ "{" }}{{ education.university_name_masters | trim }}{{ "}" }} \hfill {{ education.place_masters }} \\
 Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
 
-\vspace{1mm}
+\vspace{1pt}
 \textbf{{ "{" }}{{ education.university_name_undergrad | trim }}{{ "}" }} \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
 
@@ -56,10 +54,10 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 %====================
 \vspace{-2pt}
 \section*{Research Experience}
-{% for exp in research_experience %}
-\noindent\textbf{{ "{" }}{{ exp.title }}{{ "}" }}\\[-2pt]
-\begin{itemize}[leftmargin=1.5em, itemsep=0.2em, topsep=0.2em]
-{% for bullet in exp.bullets %}
+{% for proj in research_experience %}
+\textbf{{ "{" }}{{ proj.title }}{{ "}" }}
+\begin{itemize}
+{% for bullet in proj.bullets %}
   \item {{ bullet }}
 {% endfor %}
 \end{itemize}
