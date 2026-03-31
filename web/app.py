@@ -52,6 +52,7 @@ class GenerateFromTextResponse(BaseModel):
     job: dict
 
 
+@dataclass
 class AppState:
     config: AppConfig
     generator: ResumeGenerator
