@@ -1,12 +1,12 @@
 \documentclass[10pt]{article}
-\usepackage[margin=0.7in]{geometry}
+\usepackage[margin=0.5in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
-\setlist[itemize]{leftmargin=1.2em, itemsep=0.2em, topsep=0.2em}
+\setlist[itemize]{noitemsep, topsep=-3.5pt, leftmargin=*,label=\large\textbullet}
 \pagenumbering{gobble}
 \setlength{\parindent}{0pt}
 
@@ -46,7 +46,7 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 \section*{Skills}
 \par
 {% for group in skills -%}
-\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }} \\
+\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }} \\[0.1pt]
 {%- endfor %}
 
 %====================
