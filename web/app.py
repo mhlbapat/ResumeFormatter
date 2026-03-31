@@ -50,6 +50,7 @@ class GenerateFromTextRequest(BaseModel):
 class GenerateFromTextResponse(BaseModel):
     pdf_url: str
     job: dict
+    candidate_name: str
 
 
 @dataclass
@@ -104,8 +105,9 @@ def generate_from_text(req: GenerateFromTextRequest) -> GenerateFromTextResponse
     )
 
     resume_cfg = state.config.resume
+    candidate_name = resume_cfg.get("candidate_name", "Candidate")
     candidate_profile = {
-        "candidate_name": resume_cfg.get("candidate_name", "Candidate"),
+        "candidate_name": candidate_name,
         "contact": {
             "email": resume_cfg.get("contact", {}).get("email", ""),
             "phone": resume_cfg.get("contact", {}).get("phone", ""),
@@ -131,4 +133,5 @@ def generate_from_text(req: GenerateFromTextRequest) -> GenerateFromTextResponse
             "company": content.company or job.company,
             "location": req.location,
         },
+        candidate_name=candidate_name,
     )

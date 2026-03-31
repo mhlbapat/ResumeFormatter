@@ -38,14 +38,15 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         const pdfUrl = `${API_BASE}${resp.pdf_url}`;
         const jobTitle = (resp.job && resp.job.title) || "";
         const company = (resp.job && resp.job.company) || "";
+        const candidateName = resp.candidate_name || "Candidate";
 
         const safe = (s) =>
           String(s || "")
             .replace(/\s+/g, "_")
             .replace(/[^A-Za-z0-9_\-]/g, "")
             .slice(0, 60);
-        const baseNameParts = ["Mehul_Bapat", safe(company), safe(jobTitle)].filter(Boolean);
-        const filename = `${baseNameParts.join("_") || "Mehul_Bapat_Resume"}.pdf`;
+        const baseNameParts = [safe(candidateName), safe(company), safe(jobTitle)].filter(Boolean);
+        const filename = `${baseNameParts.join("_") || "resume"}.pdf`;
 
         // Download to the user's Downloads folder.
         chrome.downloads.download(
