@@ -41,13 +41,13 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 \section*{Skills}
 \par
 {% for group in skills -%}
-\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }} \\[0.1pt]
+\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }} \\[1pt]
 {%- endfor %}
 
 %====================
 % Research Experience
 %====================
-\vspace{-5pt}
+\vspace{-100pt}
 \section*{Research Experience}
 {% for proj in research_experience %}
 \textbf{{ "{" }}{{ proj.title }}{{ "}" }}
