@@ -97,6 +97,7 @@ class LatexBuilder:
             })
 
         education: Dict[str, Any] = self.config.resume.get("education", {}) or {}
+        contact_cfg: Dict[str, Any] = self.config.resume.get("contact", {}) or {}
 
         context: Dict[str, Any] = {
             "job_title": latex_escape(resume.job_title),
@@ -106,6 +107,7 @@ class LatexBuilder:
             "skills": skills_escaped,
             "research_experience": research_escaped,
             "education": education,
+            "linkedin_handle": contact_cfg.get("linkedin_handle", ""),
             **candidate_profile,
         }
 
