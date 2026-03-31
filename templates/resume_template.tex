@@ -18,7 +18,7 @@
 \begin{center}
 {\Huge \textbf{ {{ candidate_name }} }}\\[0.1in]
 {{ contact.location }} \quad | \quad {{ contact.phone }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
-\end{center}[0.1in]
+\end{center}\\[0.1in]
 \noindent {{ summary | trim }}
 
 %====================
@@ -28,11 +28,9 @@
 {% set _lb = "{" %}{% set _rb = "}" %}\newcommand{\phddegree}{ {{ _lb ~ (phd_degree | trim) ~ _rb }} }
 \textbf{{ "{" }}{{ education.university_name_phd | trim }}{{ "}" }} \hfill {{ education.place_phd }} \\
 Doctor of Philosophy in\phddegree \hfill {{ education.date_phd }}\\
-
 \vspace{0.1pt}
 \textbf{{ "{" }}{{ education.university_name_masters | trim }}{{ "}" }} \hfill {{ education.place_masters }} \\
 Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
-
 \vspace{0.1pt}
 \textbf{{ "{" }}{{ education.university_name_undergrad | trim }}{{ "}" }} \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
