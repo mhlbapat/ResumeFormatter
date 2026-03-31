@@ -22,9 +22,9 @@
 \vspace{3mm}
 {{ summary }}
 
-\%====================
-\% Education
-\%====================
+%====================
+% Education
+%====================
 \section*{Education}
 \par
 \textbf{ {{ education.university_name_phd }} } \hfill {{ education.place_phd }} \\
@@ -38,18 +38,18 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 \textbf{ {{ education.university_name_undergrad }} } \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
 
-\%====================
-\% Skills
-\%====================
+%====================
+% Skills
+%====================
 \section*{Skills}
 \par
 {% for group in skills %}
 \noindent\textbf{ {{ group.heading }}: } {{ group["items"] | join(", ") }}\\
 {% endfor %}
 
-\%====================
-\% Research Experience
-\%====================
+%====================
+% Research Experience
+%====================
 \section*{Research Experience}
 \par
 {% for exp in research_experience %}
