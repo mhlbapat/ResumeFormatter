@@ -21,7 +21,7 @@
 {{ contact.location }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }} \quad | \quad {{ contact.phone }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
 \end{center}
 
-\vspace{1mm}
+\vspace{0.2mm}
 \noindent {{ summary | trim }}
 
 %====================
@@ -32,11 +32,11 @@
 \textbf{{ "{" }}{{ education.university_name_phd | trim }}{{ "}" }} \hfill {{ education.place_phd }} \\
 Doctor of Philosophy in\phddegree \hfill {{ education.date_phd }}\\
 
-\vspace{1pt}
+\vspace{0.5pt}
 \textbf{{ "{" }}{{ education.university_name_masters | trim }}{{ "}" }} \hfill {{ education.place_masters }} \\
 Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
 
-\vspace{1pt}
+\vspace{0.5pt}
 \textbf{{ "{" }}{{ education.university_name_undergrad | trim }}{{ "}" }} \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
 
