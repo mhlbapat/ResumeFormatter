@@ -16,9 +16,10 @@
 \begin{document}
 
 \begin{center}
-{\Huge \textbf{ {{ candidate_name }} }}\\[0.1in]
+{\Huge \textbf{ {{ candidate_name }} }}\\[0.08in]
 {{ contact.location }} \quad | \quad {{ contact.phone }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
-\end{center}\\[0.1in]
+\end{center}
+\vspace{0.1in}
 \noindent {{ summary | trim }}
 
 %====================
