@@ -30,7 +30,7 @@
 \noindent\textbf{Skills}
 \par
 {% for group in skills %}
-\noindent\textbf{ {{ group.heading }}: } {{ ", ".join(group.items) }}\\
+\noindent\textbf{ {{ group.heading }}: } {{ group["items"] | join(", ") }}\\
 {% endfor %}
 
 \vspace{2mm}
