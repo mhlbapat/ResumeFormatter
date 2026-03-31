@@ -22,6 +22,7 @@ resume:
     email: ""
     phone: ""
     location: ""
+    linkedin_handle: ""
   education:
     # Set these to control the Education section in the LaTeX template.
     university_name_phd: ""

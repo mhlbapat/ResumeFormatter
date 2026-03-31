@@ -49,9 +49,12 @@ Update these as needed:
 
 - `resume.projects_path` -> path to your `profile.md` (default: `data/cv/profile.md`)
 - `resume.phd_degree` -> academic track label shown on resumes (default: `Chemical Engineering`)
-- `resume.candidate_name` and `resume.contact.*`
+- `resume.candidate_name`
+- `resume.contact.email`, `resume.contact.phone`, `resume.contact.location`, `resume.contact.linkedin_handle`
 - `llm.provider` and `llm.model`
 - `resume.static_prompt_path` -> prompt template used for resume generation (default: `prompts/resume_static_prefix.txt`)
+
+You must also have a LaTeX distribution installed (for example TeX Live or MacTeX) with `pdflatex` available on your PATH, since the tool calls `pdflatex` to generate PDFs.
 
 3. Tune the system prompt (recommended)
 

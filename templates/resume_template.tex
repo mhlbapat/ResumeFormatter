@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \setlist[itemize]{leftmargin=1.2em, itemsep=0.2em, topsep=0.2em}
@@ -14,8 +15,8 @@
 
 \begin{center}
 {\LARGE \textbf{ {{ candidate_name }} }}\\
-\vspace{2mm}
-{{ contact.email }} \quad | \quad {{ contact.phone }} \quad | \quad {{ contact.location }}
+\vspace{1mm}
+{\textcolor{blue}{ {{ contact.email }} }} \quad | \quad {{ contact.phone }} \quad | \quad {{ contact.location }} \quad | \quad \href{https://www.linkedin.com/in/{{ contact.linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ contact.linkedin_handle }}}}
 \end{center}
 
 \vspace{3mm}
