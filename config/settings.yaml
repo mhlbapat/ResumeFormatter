@@ -22,3 +22,18 @@ resume:
     email: ""
     phone: ""
     location: ""
+  education:
+    # Set these to control the Education section in the LaTeX template.
+    university_name_phd: ""
+    place_phd: ""
+    date_phd: ""
+
+    university_name_masters: ""
+    place_masters: ""
+    masters_degree: ""
+    date_masters: ""
+
+    university_name_undergrad: ""
+    place_undergrad: ""
+    undergrad_degree_name: ""
+    date_undergrad: ""

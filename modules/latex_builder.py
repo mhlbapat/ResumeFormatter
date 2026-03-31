@@ -96,6 +96,8 @@ class LatexBuilder:
                 "bullets": [latex_escape(b) for b in r.bullets],
             })
 
+        education: Dict[str, Any] = self.config.resume.get("education", {}) or {}
+
         context: Dict[str, Any] = {
             "job_title": latex_escape(resume.job_title),
             "company": latex_escape(resume.company),
@@ -103,6 +105,7 @@ class LatexBuilder:
             "phd_degree": latex_escape(getattr(resume, "phd_degree", "")),
             "skills": skills_escaped,
             "research_experience": research_escaped,
+            "education": education,
             **candidate_profile,
         }
 

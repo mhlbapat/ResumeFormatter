@@ -4,8 +4,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage[hidelinks]{hyperref}
 \usepackage{enumitem}
+\usepackage{titlesec}
 \setlist[itemize]{leftmargin=1.2em, itemsep=0.2em, topsep=0.2em}
 \pagenumbering{gobble}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
 
 \begin{document}
 
@@ -16,25 +19,37 @@
 \end{center}
 
 \vspace{3mm}
-\noindent\textbf{Target Role:} {{ job_title }} at {{ company }}
-
-\vspace{1mm}
-\noindent\textbf{Academic Track:} {{ phd_degree }}
-
-\vspace{2mm}
-\noindent\textbf{Professional Summary}
-\par
 {{ summary }}
 
-\vspace{2mm}
-\noindent\textbf{Skills}
+\%====================
+\% Education
+\%====================
+\section*{Education}
+\par
+\textbf{ {{ education.university_name_phd }} } \hfill {{ education.place_phd }} \\
+Doctor of Philosophy in {{ phd_degree }} \hfill {{ education.date_phd }}\\
+
+\vspace{1mm}
+\textbf{ {{ education.university_name_masters }} } \hfill {{ education.place_masters }} \\
+Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
+
+\vspace{1mm}
+\textbf{ {{ education.university_name_undergrad }} } \hfill {{ education.place_undergrad }} \\
+{{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
+
+\%====================
+\% Skills
+\%====================
+\section*{Skills}
 \par
 {% for group in skills %}
 \noindent\textbf{ {{ group.heading }}: } {{ group["items"] | join(", ") }}\\
 {% endfor %}
 
-\vspace{2mm}
-\noindent\textbf{Research Experience}
+\%====================
+\% Research Experience
+\%====================
+\section*{Research Experience}
 \par
 {% for exp in research_experience %}
 \noindent\textbf{ {{ exp.title }} }
