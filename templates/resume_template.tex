@@ -19,23 +19,21 @@
 {\textcolor{blue}{ {{ contact.email }} }} \quad | \quad {{ contact.phone }} \quad | \quad {{ contact.location }} \quad | \quad \href{https://www.linkedin.com/in/{{ contact.linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ contact.linkedin_handle }}}}
 \end{center}
 
-\vspace{3mm}
-{{ summary }}
+\vspace{1mm}
+{{ summary | trim }}
 
 %====================
 % Education
 %====================
 \section*{Education}
 \par
-\textbf{ {{ education.university_name_phd }} } \hfill {{ education.place_phd }} \\
+\textbf{{ "{" }}{{ education.university_name_phd | trim }}{{ "}" }} \hfill {{ education.place_phd }} \\
 Doctor of Philosophy in {{ phd_degree }} \hfill {{ education.date_phd }}\\
 
-\vspace{1mm}
-\textbf{ {{ education.university_name_masters }} } \hfill {{ education.place_masters }} \\
+\textbf{{ "{" }}{{ education.university_name_masters | trim }}{{ "}" }} \hfill {{ education.place_masters }} \\
 Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
 
-\vspace{1mm}
-\textbf{ {{ education.university_name_undergrad }} } \hfill {{ education.place_undergrad }} \\
+\textbf{{ "{" }}{{ education.university_name_undergrad | trim }}{{ "}" }} \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
 
 %====================
@@ -43,22 +41,24 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 %====================
 \section*{Skills}
 \par
-{% for group in skills %}
-\noindent\textbf{ {{ group.heading }}: } {{ group["items"] | join(", ") }}\\
-{% endfor %}
+{% for group in skills -%}
+\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }} \\
+{%- endfor %}
 
 %====================
 % Research Experience
 %====================
 \section*{Research Experience}
 \par
+\\[-2pt]
 {% for exp in research_experience %}
-\noindent\textbf{ {{ exp.title }} }
+\textbf{{ "{" }}{{ exp.title }}{{ "}" }}
 \begin{itemize}
 {% for bullet in exp.bullets %}
   \item {{ bullet }}
 {% endfor %}
 \end{itemize}
+\vspace{4pt}
 {% endfor %}
 
 \end{document}
