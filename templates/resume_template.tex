@@ -10,6 +10,7 @@
 \pagenumbering{gobble}
 
 \titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{4pt}{4pt}
 
 \begin{document}
 
@@ -29,8 +30,10 @@
 {% set _lb = "{" %}{% set _rb = "}" %}\newcommand{\phddegree}{ {{ _lb ~ (phd_degree | trim) ~ _rb }} }
 \textbf{{ "{" }}{{ education.university_name_phd | trim }}{{ "}" }} \hfill {{ education.place_phd }} \\
 Doctor of Philosophy in\phddegree \hfill {{ education.date_phd }}\\
+\vspace{1mm}
 \textbf{{ "{" }}{{ education.university_name_masters | trim }}{{ "}" }} \hfill {{ education.place_masters }} \\
 Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
+\vspace{1mm}
 \textbf{{ "{" }}{{ education.university_name_undergrad | trim }}{{ "}" }} \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
 
