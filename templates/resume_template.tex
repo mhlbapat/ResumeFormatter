@@ -6,9 +6,20 @@
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
-\setlist[itemize]{noitemsep, topsep=-3.5pt, leftmargin=*,label=\large\textbullet}
+
 \pagenumbering{gobble}
 \setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+% Tighter and more controlled list spacing
+\setlist[itemize]{
+    leftmargin=*,
+    label=\large\textbullet,
+    itemsep=1pt,
+    topsep=2pt,
+    parsep=0pt,
+    partopsep=0pt
+}
 
 \titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
 \titlespacing*{\section}{0pt}{3pt}{3pt}
@@ -19,7 +30,7 @@
 {\Huge \textbf{ {{ candidate_name }} }}\\[0.08in]
 {{ contact.location }} \quad | \quad {{ contact.phone }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
 \end{center}
-\vspace{0.1in}
+% \vspace{0.02in}
 \noindent {{ summary | trim }}
 
 %====================
@@ -27,12 +38,15 @@
 %====================
 \section*{Education}
 {% set _lb = "{" %}{% set _rb = "}" %}\newcommand{\phddegree}{ {{ _lb ~ (phd_degree | trim) ~ _rb }} }
+
 \textbf{{ "{" }}{{ education.university_name_phd | trim }}{{ "}" }} \hfill {{ education.place_phd }} \\
-Doctor of Philosophy in\phddegree \hfill {{ education.date_phd }}\\
-\vspace{0.1pt}
+Doctor of Philosophy in \phddegree \hfill {{ education.date_phd }}
+\par\vspace{4pt}
+
 \textbf{{ "{" }}{{ education.university_name_masters | trim }}{{ "}" }} \hfill {{ education.place_masters }} \\
-Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }} \\
-\vspace{0.1pt}
+Master of Science in {{ education.masters_degree }} \hfill {{ education.date_masters }}
+\par\vspace{4pt}
+
 \textbf{{ "{" }}{{ education.university_name_undergrad | trim }}{{ "}" }} \hfill {{ education.place_undergrad }} \\
 {{ education.undergrad_degree_name }} \hfill {{ education.date_undergrad }}
 
@@ -40,24 +54,23 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 % Skills
 %====================
 \section*{Skills}
-\par
-{% for group in skills -%}
-\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }} \\[1pt]
-{%- endfor %}
+{% for group in skills %}
+\noindent\textbf{{ "{" }}{{ group.heading | trim }}:} {{ group["items"] | join(", ") }}{% if not loop.last %}\par\vspace{1pt}{% endif %}
+{% endfor %}
 
 %====================
 % Research Experience
 %====================
-% \vspace{-100pt}
 \section*{Research Experience}
+\vspace{2pt}
 {% for proj in research_experience %}
-\textbf{{ "{" }}{{ proj.title }}{{ "}" }}
+\noindent\textbf{{ "{" }}{{ proj.title }}{{ "}" }}\par
 \begin{itemize}
 {% for bullet in proj.bullets %}
   \item {{ bullet }}
 {% endfor %}
 \end{itemize}
-\vspace{4pt}
+{% if not loop.last %}\addvspace{5pt}{% endif %}
 {% endfor %}
 
 \end{document}
