@@ -18,7 +18,7 @@
 \begin{center}
 {\LARGE \textbf{ {{ candidate_name }} }}\\
 \vspace{0.5mm}
-{{ contact.location }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }} \quad | \quad {{ contact.phone }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
+{{ contact.location }} \quad | \quad {{ contact.phone }} \quad | \quad {\textcolor{blue}{ {{ contact.email }} }}{% if linkedin_handle %} \quad | \quad \href{https://www.linkedin.com/in/{{ linkedin_handle }}}{\textcolor{blue}{LinkedIn/{{ linkedin_handle }}}}{% endif %}
 \end{center}
 
 \vspace{0.2mm}
@@ -52,7 +52,7 @@ Master of Science in {{ education.masters_degree }} \hfill {{ education.date_mas
 %====================
 % Research Experience
 %====================
-\vspace{-2pt}
+\vspace{-5pt}
 \section*{Research Experience}
 {% for proj in research_experience %}
 \textbf{{ "{" }}{{ proj.title }}{{ "}" }}
