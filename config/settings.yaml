@@ -38,3 +38,10 @@ resume:
     place_undergrad: ""
     undergrad_degree_name: ""
     date_undergrad: ""
+
+job_search:
+  keywords:
+    - "software engineer"
+    - "data scientist"
+  batch_size: 5
+  autofill_prompt_path: prompts/autofill_prompt.txt

@@ -4,15 +4,29 @@
   "version": "0.1.0",
   "description": "Generate a tailored resume from pasted job text using your local ResumeFormatter backend.",
   "permissions": [
-    "downloads"
+    "downloads",
+    "tabs",
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": [
-    "http://localhost:8000/*"
+    "http://localhost:8000/*",
+    "https://www.linkedin.com/*",
+    "*://*/*"
   ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/jobs/search/*",
+        "https://www.linkedin.com/jobs/collections/*"
+      ],
+      "js": ["scripts/linkedin_scraper.js"]
+    }
+  ],
   "action": {
     "default_title": "ResumeFormatter",
     "default_popup": "popup.html"

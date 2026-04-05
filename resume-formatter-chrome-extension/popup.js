@@ -66,6 +66,38 @@ document.addEventListener("DOMContentLoaded", () => {
     requestGeneration();
   });
 
+  const batchStartBtn = document.getElementById("batchStartBtn");
+  const batchKeyword = document.getElementById("batchKeyword");
+  const batchSize = document.getElementById("batchSize");
+  const batchStatus = document.getElementById("batchStatus");
+
+  batchStartBtn.addEventListener("click", () => {
+    const keyword = batchKeyword.value.trim();
+    if (!keyword) {
+      batchStatus.textContent = "Please enter a search keyword.";
+      return;
+    }
+    batchStatus.textContent = "Initiating LinkedIn search...";
+    batchStartBtn.disabled = true;
+
+    chrome.runtime.sendMessage(
+      { 
+        type: "START_BATCH_SEARCH", 
+        keyword: keyword, 
+        size: parseInt(batchSize.value, 10) || 3 
+      },
+      (resp) => {
+        if (chrome.runtime.lastError) {
+           batchStatus.textContent = "Error starting batch process.";
+           batchStartBtn.disabled = false;
+        } else {
+           batchStatus.textContent = "Batch job started. Opening LinkedIn...";
+        }
+      }
+    );
+  });
+
+
   // Prevent scrolling the entire popup; only allow scrolling inside the textarea.
   // This stops the outer page from moving when you use the mouse wheel,
   // while keeping the inner jobText scrollable.

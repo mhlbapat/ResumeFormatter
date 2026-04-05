@@ -1,7 +1,4 @@
 // Background/service worker for ResumeFormatter Chrome extension.
-// For the popup flow: receives raw job description text, calls the local backend,
-// downloads the generated PDF, and opens it in a new tab.
-
 const API_BASE = "http://localhost:8000";
 
 async function callBackend(description) {
@@ -26,52 +23,86 @@ async function callBackend(description) {
   return res.json();
 }
 
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg && msg.type === "GENERATE_RESUME_FROM_TEXT") {
+    // Normal single mode
     const description = String(msg.description || "").trim();
-    if (!description) {
-      sendResponse({ error: "Job description cannot be empty." });
-      return true;
-    }
+    if (!description) { sendResponse({ error: "Job description cannot be empty." }); return true; }
     callBackend(description)
       .then((resp) => {
+        handlePdfDownload(resp);
         const pdfUrl = `${API_BASE}${resp.pdf_url}`;
-        const jobTitle = (resp.job && resp.job.title) || "";
-        const company = (resp.job && resp.job.company) || "";
-        const candidateName = resp.candidate_name || "Candidate";
+        chrome.tabs.create({ url: pdfUrl });
+        sendResponse({ pdfUrl, jobTitle: resp.job?.title, company: resp.job?.company });
+      }).catch(err => sendResponse({ error: String(err) }));
+    return true;
+  }
 
-        const safe = (s) =>
-          String(s || "")
-            .replace(/\s+/g, "_")
-            .replace(/[^A-Za-z0-9_\-]/g, "")
-            .slice(0, 60);
-        const baseNameParts = [safe(candidateName), safe(company), safe(jobTitle)].filter(Boolean);
-        const filename = `${baseNameParts.join("_") || "resume"}.pdf`;
-
-        // Download to the user's Downloads folder.
-        chrome.downloads.download(
-          {
-            url: pdfUrl,
-            filename,
-            saveAs: false
-          },
-          () => {}
-        );
-
-        // Open the PDF in a new tab in the same window as the popup tab, if available.
-        const senderTab = _sender && _sender.tab;
-        const createOpts = senderTab && senderTab.windowId
-          ? { url: pdfUrl, windowId: senderTab.windowId }
-          : { url: pdfUrl };
-        chrome.tabs.create(createOpts);
-
-        sendResponse({ pdfUrl, jobTitle, company });
-      })
-      .catch((err) => {
-        console.error("Failed to generate tailored resume:", err);
-        sendResponse({ error: String(err) });
-      });
+  if (msg && msg.type === "START_BATCH_SEARCH") {
+    const url = `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(msg.keyword)}`;
+    chrome.tabs.create({ url: url }, (tab) => {
+      // Wait for it to load
+      const listener = (tabId, changeInfo) => {
+        if (tabId === tab.id && changeInfo.status === 'complete') {
+          chrome.tabs.onUpdated.removeListener(listener);
+          // Wait another couple seconds for react to render
+          setTimeout(() => {
+            chrome.tabs.sendMessage(tabId, { type: "SCRAPE_N_JOBS", size: msg.size }, (response) => {
+              if (chrome.runtime.lastError || !response) {
+                console.error("Error communicating with scraper:", chrome.runtime.lastError);
+                return;
+              }
+              const jobs = response.jobs || [];
+              console.log("Scraped Jobs:", jobs);
+              processBatchJobs(jobs);
+            });
+          }, 3000);
+        }
+      };
+      chrome.tabs.onUpdated.addListener(listener);
+    });
+    sendResponse({ status: "started" });
     return true;
   }
   return false;
 });
+
+async function processBatchJobs(jobs) {
+    for (const job of jobs) {
+        if (!job.description || job.description.length < 50) continue;
+        
+        try {
+            const resp = await callBackend(job.description);
+            handlePdfDownload(resp);
+            
+            // Open apply tab
+            chrome.tabs.create({ url: job.applyUrl }, (tab) => {
+                // Wait for it to load to inject script
+                const autofillListener = (tabId, changeInfo) => {
+                    if (tabId === tab.id && changeInfo.status === 'complete') {
+                        chrome.tabs.onUpdated.removeListener(autofillListener);
+                        // Inject autofill
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ["scripts/autofill.js"]
+                        });
+                    }
+                };
+                chrome.tabs.onUpdated.addListener(autofillListener);
+            });
+        } catch(e) {
+            console.error("Failed batch step", e);
+        }
+    }
+}
+
+function handlePdfDownload(resp) {
+    const pdfUrl = `${API_BASE}${resp.pdf_url}`;
+    const jobTitle = (resp.job && resp.job.title) || "";
+    const company = (resp.job && resp.job.company) || "";
+    const candidateName = resp.candidate_name || "Candidate";
+    const baseNameParts = [candidateName.replace(/\s+/g,"_"), company.replace(/\s+/g,"_"), jobTitle.replace(/\s+/g,"_")].filter(Boolean);
+    const filename = `${baseNameParts.join("_") || "resume"}.pdf`;
+
+    chrome.downloads.download({ url: pdfUrl, filename, saveAs: false }, () => {});
+}
