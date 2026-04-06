@@ -53,6 +53,9 @@ Update these as needed:
 - `resume.contact.email`, `resume.contact.phone`, `resume.contact.location`, `resume.contact.linkedin_handle`
 - `llm.provider` and `llm.model`
 - `resume.static_prompt_path` -> prompt template used for resume generation (default: `prompts/resume_static_prefix.txt`)
+- `job_search.keywords` -> list of default keywords for LinkedIn search
+- `job_search.batch_size` -> default number of jobs to process per batch
+- `job_search.autofill_prompt_path` -> LLM prompt template used to map resume data to input forms.
 
 You must also have a LaTeX distribution installed (for example TeX Live or MacTeX) with `pdflatex` available on your PATH, since the tool calls `pdflatex` to generate PDFs.
 
@@ -85,6 +88,7 @@ The extension expects the backend at `http://localhost:8000`.
 
 ## Usage
 
+### Single Job Generation
 1. Click the **ResumeFormatter** extension icon in Chrome.
 2. Paste the full job description text into the popup text area.
 3. Click **Generate & Download**.
@@ -93,6 +97,20 @@ The extension expects the backend at `http://localhost:8000`.
    - The backend generates a tailored PDF
    - Chrome downloads the PDF to your Downloads folder
    - A new tab opens with the generated PDF
+
+### Batch Search & Auto-Fill System
+1. Click the **ResumeFormatter** extension icon in Chrome.
+2. Look for the **Batch Apply System** section at the top of the popup.
+3. Enter your desired search keyword (e.g. "Software Engineer") and the number of jobs to process ("n").
+4. Click **Start LinkedIn Auto-Search**.
+5. The extension will automatically:
+   - Navigate to LinkedIn Jobs and gather "n" job descriptions based on your keyword.
+   - Pings the local backend to generate tailored tailored PDF resumes for each job on the list.
+   - Download the generated PDFs and open the application page tabs.
+   - An Auto-Fill script executes on the opened tabs, queries your local backend for smart variable mapping depending on the form layout, and types in your information.
+6. Verify the form data on each tab, manually upload your newly generated PDF to the file input, and click **Submit**.
+
+### Troubleshooting
 
 If generation fails:
 
