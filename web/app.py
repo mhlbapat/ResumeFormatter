@@ -178,3 +178,25 @@ def autofill_form(req: AutofillFormRequest) -> AutofillFormResponse:
 
     return AutofillFormResponse(mapped_data=mapped_data)
 
+
+class AgentRequest(BaseModel):
+    input: str
+
+
+class AgentResponse(BaseModel):
+    output: str
+
+
+@app.post("/agent_chat", response_model=AgentResponse)
+def agent_chat(req: AgentRequest) -> AgentResponse:
+    if state is None:
+        raise HTTPException(status_code=500, detail="Server not initialized")
+    
+    from modules.agent.orchestrator import build_agent
+    agent = build_agent(state)
+    try:
+        response = agent.invoke({"input": req.input})
+        return AgentResponse(output=response["output"])
+    except Exception as exc:
+        logger.exception("Agent invocation failed")
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
