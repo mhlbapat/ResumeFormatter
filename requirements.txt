@@ -7,7 +7,3 @@ fastapi
 uvicorn
 google-genai
 pytest
-langchain
-langchain-openai
-langchain-community
-langchain-core

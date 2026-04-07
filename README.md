@@ -98,17 +98,6 @@ The extension expects the backend at `http://localhost:8000`.
    - Chrome downloads the PDF to your Downloads folder
    - A new tab opens with the generated PDF
 
-### Batch Search & Auto-Fill System
-1. Click the **ResumeFormatter** extension icon in Chrome.
-2. Look for the **Batch Apply System** section at the top of the popup.
-3. Enter your desired search keyword (e.g. "Software Engineer") and the number of jobs to process ("n").
-4. Click **Start LinkedIn Auto-Search**.
-5. The extension will automatically:
-   - Navigate to LinkedIn Jobs and gather "n" job descriptions based on your keyword.
-   - Pings the local backend to generate tailored tailored PDF resumes for each job on the list.
-   - Download the generated PDFs and open the application page tabs.
-   - An Auto-Fill script executes on the opened tabs, queries your local backend for smart variable mapping depending on the form layout, and types in your information.
-6. Verify the form data on each tab, manually upload your newly generated PDF to the file input, and click **Submit**.
 
 ### Troubleshooting
 
